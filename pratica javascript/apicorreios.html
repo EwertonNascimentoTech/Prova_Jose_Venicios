@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="cepForm">
+        <label for="cep">Digite seu CEP:</label>
+        <input type="text" id="cep" placeholder="CEP">
+        <button type="button" id="buscar">Buscar</button>
+    </form>
+    <div id="address"></div>
+
+    <script>
+        document.getElementById('buscar').addEventListener('click', function() {
+            var cep = document.getElementById('cep').value;
+            
+            if (cep) {
+                fetch('https://viacep.com.br/ws/' + cep + '/json/')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.erro) {
+                            document.getElementById('address').innerHTML =
+                                `Endereço: ${data.bairro}, ${data.localidade} - ${data.uf}`;
+                        } else {
+                            document.getElementById('address').innerHTML = 'CEP não encontrado.';
+                        }
+                    })
+                    .catch(error => {
+                        document.getElementById('address').innerHTML = 'Erro ao buscar o endereço.';
+                    });
+            } else {
+                document.getElementById('address').innerHTML = 'Por favor, informe um CEP.';
+            }
+        });
+    </script>
+</body>
+</html>
